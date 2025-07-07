@@ -1,6 +1,6 @@
 # timer_app
 
-A new Flutter project.
+This a timer app to help me orginishe my daily tasks.
 
 ## Getting Started
 

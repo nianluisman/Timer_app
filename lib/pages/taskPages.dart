@@ -53,7 +53,7 @@ Widget build(BuildContext context) {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const HomePager()),
+              MaterialPageRoute(builder: (context) => const HomePage()),
             );
           },
         ),
