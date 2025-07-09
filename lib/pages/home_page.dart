@@ -5,7 +5,7 @@ import '../models/event.dart';
 import '../widgets/calendar_widget.dart';
 import '../widgets/task_list.dart';
 import '../widgets/add_task_dialog.dart';
-
+import '../models/event_manager.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -18,7 +18,7 @@ class _HomePageState extends State<HomePage> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
-  final Map<DateTime, List<Event>> _events = {};
+ final EventManager _eventManager = EventManager();
 
   @override
   void initState() {
@@ -26,18 +26,15 @@ class _HomePageState extends State<HomePage> {
     _selectedDay = _focusedDay;
   }
 
-  List<Event> _getEventsForDay(DateTime day) {
-    return _events[DateTime(day.year, day.month, day.day)] ?? [];
-  }
   void _addEvent(String title) {
-    final date = DateTime(_selectedDay!.year, _selectedDay!.month, _selectedDay!.day);
-    setState(() {
-      if (_events[date] != null) {
-        _events[date]!.add(Event(title));
-      } else {
-        _events[date] = [Event(title)];
-      }
-    });
+  final date = DateTime(_selectedDay!.year, _selectedDay!.month, _selectedDay!.day);
+  setState(() {
+    _eventManager.addEvent(date, Event(title));
+  });
+}
+
+  List<Event> _getEventsForDay(DateTime day) {
+    return _eventManager.getEventsForDay(day);
   }
 
   @override
