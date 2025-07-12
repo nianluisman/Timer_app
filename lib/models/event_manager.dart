@@ -24,4 +24,15 @@ class EventManager {
       _events[date] = [event];
     }
   }
+
+void removeEvent(DateTime day, Event event) {
+      final events = _events[day];
+      if (events != null) {
+        events.remove(event);
+        if (events.isEmpty) {
+          _events.remove(day);
+        }
+      }
+    }
 }
+

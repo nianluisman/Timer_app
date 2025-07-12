@@ -3,8 +3,13 @@ import '../models/event.dart';
 
 class TaskList extends StatelessWidget {
   final List<Event> tasks;
+  final void Function(Event) onDismissed;
 
-  const TaskList({super.key, required this.tasks});
+  const TaskList({
+    super.key,
+    required this.tasks,
+    required this.onDismissed,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,11 +20,23 @@ class TaskList extends StatelessWidget {
     return ListView.builder(
       itemCount: tasks.length,
       itemBuilder: (context, index) {
-        return ListTile(
-          leading: const Icon(Icons.check_circle_outline),
-          title: Text(tasks[index].title),
+        final task = tasks[index];
+        return Dismissible(
+          key: Key('${task.title}-$index'),
+          direction: DismissDirection.endToStart,
+          onDismissed: (_) => onDismissed(task),
+          background: Container(
+            color: Colors.red,
+            alignment: Alignment.centerRight,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: const Icon(Icons.delete, color: Colors.white),
+          ),
+          child: ListTile(
+            title: Text(task.title),
+          ),
         );
       },
     );
   }
 }
+

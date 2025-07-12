@@ -17,8 +17,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
-  DateTime? _selectedDay;
- final EventManager _eventManager = EventManager();
+  late DateTime _selectedDay;
+  final EventManager _eventManager = EventManager();
 
   @override
   void initState() {
@@ -27,14 +27,29 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _addEvent(String title) {
-  final date = DateTime(_selectedDay!.year, _selectedDay!.month, _selectedDay!.day);
-  setState(() {
-    _eventManager.addEvent(date, Event(title));
-  });
-}
+    final date = DateTime(
+      _selectedDay.year,
+      _selectedDay.month,
+      _selectedDay.day,
+    );
+    setState(() {
+      _eventManager.addEvent(date, Event(title));
+    });
+  }
 
   List<Event> _getEventsForDay(DateTime day) {
     return _eventManager.getEventsForDay(day);
+  }
+
+  void _removeEvent(Event event) {
+    final date = DateTime(
+      _selectedDay.year,
+      _selectedDay.month,
+      _selectedDay.day,
+    );
+    setState(() {
+      _eventManager.removeEvent(date, event);
+    });
   }
 
   @override
@@ -59,7 +74,12 @@ class _HomePageState extends State<HomePage> {
             eventLoader: _getEventsForDay,
           ),
           const SizedBox(height: 16),
-          Expanded(child: TaskList(tasks: _getEventsForDay(_selectedDay!))),
+          Expanded(
+            child: TaskList(
+              tasks: _getEventsForDay(_selectedDay),
+              onDismissed: _removeEvent,
+            ),
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(

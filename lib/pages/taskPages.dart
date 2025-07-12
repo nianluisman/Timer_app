@@ -18,7 +18,7 @@ class TaskPage extends StatefulWidget {
 
 class _TaskPageState extends State<TaskPage> {
   final DateTime _focusedDay = DateTime.now();
-  DateTime? _selectedDay;
+  late DateTime _selectedDay;
   final EventManager _eventManager = EventManager();
   DateTime _currentTime = DateTime.now();
   Timer? _timer;
@@ -27,11 +27,10 @@ class _TaskPageState extends State<TaskPage> {
   void initState() {
     super.initState();
     _selectedDay = _focusedDay;
+
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
-        setState(() {
-          _currentTime = DateTime.now();
-        });
+        _currentTime = DateTime.now();
       });
     });
   }
@@ -48,9 +47,9 @@ class _TaskPageState extends State<TaskPage> {
 
   void _addEvent(String title) {
     final date = DateTime(
-      _selectedDay!.year,
-      _selectedDay!.month,
-      _selectedDay!.day,
+      _selectedDay.year,
+      _selectedDay.month,
+      _selectedDay.day,
     );
     setState(() {
       _eventManager.addEvent(date, Event(title));
@@ -72,13 +71,24 @@ class _TaskPageState extends State<TaskPage> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Task List takes most of the space
+                // Task List
                 Expanded(
-                  flex: 4,
-                  child: TaskList(tasks: _getEventsForDay(_selectedDay!)),
+                  flex: 2,
+                  child: TaskList(
+                    tasks: _getEventsForDay(_selectedDay),
+                    onDismissed: (event) {
+                      setState(() {
+                        final date = DateTime(
+                          _selectedDay.year,
+                          _selectedDay.month,
+                          _selectedDay.day,
+                        );
+                        _eventManager.removeEvent(date, event);
+                      });
+                    },
+                  ),
                 ),
-
-                // Clock on the right
+                // Clock Display
                 Container(
                   padding: const EdgeInsets.all(16),
                   alignment: Alignment.topCenter,
@@ -107,25 +117,6 @@ class _TaskPageState extends State<TaskPage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () => showAddTaskDialog(context, _addEvent),
         child: const Icon(Icons.add),
-      ),
-    );
-  }
-}
-
-class SecondRoute extends StatelessWidget {
-  const SecondRoute({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Second Route')),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: const Text('Go Back'),
-        ),
       ),
     );
   }
