@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'pages/taskPages.dart';
+import 'package:timer_app/pages/mainPage.dart';
+import 'pages/mainPage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const TaskPage(),
+      home:  MainPage(),
     );
   }
 }

@@ -7,14 +7,14 @@ import '../widgets/task_list.dart';
 import '../widgets/add_task_dialog.dart';
 import '../models/event_manager.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class CalanderPage extends StatefulWidget {
+  const CalanderPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<CalanderPage> createState() => _CalanderPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _CalanderPageState extends State<CalanderPage> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   late DateTime _selectedDay;
@@ -55,7 +55,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Task Calendar')),
       body: Column(
         children: [
           CalendarWidget(
@@ -81,10 +80,6 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => showAddTaskDialog(context, _addEvent),
-        child: const Icon(Icons.add),
       ),
     );
   }

@@ -5,23 +5,37 @@ import '../models/event.dart';
 import '../widgets/calendar_widget.dart';
 import '../widgets/task_list.dart';
 import '../widgets/add_task_dialog.dart';
-import '../pages/home_page.dart';
+import 'CalanderPage.dart';
 import '../models/event_manager.dart';
 import 'dart:async';
 
-class TaskPage extends StatefulWidget {
-  const TaskPage({super.key});
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<TaskPage> createState() => _TaskPageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _TaskPageState extends State<TaskPage> {
+class _HomePageState extends State<HomePage> {
   final DateTime _focusedDay = DateTime.now();
   late DateTime _selectedDay;
   final EventManager _eventManager = EventManager();
   DateTime _currentTime = DateTime.now();
   Timer? _timer;
+   int _selectedIndex = 0;
+   // List of pages
+  final List<Widget> _pages = [
+    HomePage(),
+    CalanderPage(),
+  ];
+
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index; // Update index to switch views
+    });
+  }
 
   @override
   void initState() {
@@ -63,7 +77,6 @@ class _TaskPageState extends State<TaskPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Task Calendar')),
       body: Column(
         children: [
           const SizedBox(height: 16),
@@ -92,6 +105,7 @@ class _TaskPageState extends State<TaskPage> {
                 Container(
                   padding: const EdgeInsets.all(16),
                   alignment: Alignment.topCenter,
+                  color: const Color.fromARGB(255, 84, 118, 134),
                   child: Text(
                     _formatTime(_currentTime),
                     style: const TextStyle(
@@ -103,16 +117,8 @@ class _TaskPageState extends State<TaskPage> {
               ],
             ),
           ),
-          ElevatedButton(
-            child: const Text('Open Second Route'),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const HomePage()),
-              );
-            },
-          ),
-        ],
+          
+          ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => showAddTaskDialog(context, _addEvent),
